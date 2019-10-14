@@ -35,7 +35,7 @@ export function writeClickFunction(element: Element) {
     const fName = (element.textContent || (element as any).attribs['href']).replace(/[^a-zA-Z]/g, '').trim();
     return `
 export function click_${fName}() {
-    (document.evaluate('${xpath}', document.body)!.singleNodeValue as HTMLElement).click();
+    (document.evaluate('${xpath}', document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE)!.singleNodeValue as HTMLElement).click();
 }
     `.trim();
 }
