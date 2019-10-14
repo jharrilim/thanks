@@ -14,14 +14,14 @@ export function getPathTo(element: Element): string {
             return 'id("' + element.id + '")';
     }
     if (element.tagName === 'body')
-        return element.tagName;
+        return '/html/body';
 
     let ix = 0;
     const siblings = element.parentNode ? element.parentNode.childNodes : [];
     for (let i = 0; i < siblings.length; i++) {
         const sibling = siblings[i];
         if (sibling === element)
-            return getPathTo(element.parentNode as Element) + '/' + element.tagName + '[' + (ix + 1) + ']';
+            return getPathTo(element.parentNode as Element) + '/' + element.tagName + (ix + 1 === 1 ? '' : '[' + (ix + 1) + ']');
         if (sibling.nodeType === 1 && (sibling as Element).tagName === element.tagName)
             ix++;
     }
@@ -75,7 +75,7 @@ export async function thanks(resourcePath: string, outputDirPath?: string) {
     const code = await (resourcePath.startsWith('http') ? fromUrl(resourcePath) : fromFile(resourcePath));
     const outPath = outputDirPath ? outputDirPath : join(__dirname, '..', 'example', 'generated');
     await mkdir(outPath);
-    
+
     return await writeFile(join(outPath, 'page.ts'), code);
 }
 
